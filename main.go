@@ -9,6 +9,8 @@ import (
 	"github.com/cavdy-play/go_mongo/routes"
 )
 
+// https://github.com/cavdy-play/go_mongo/blob/master/config/db.go
+
 func main() {
 	// Database
 	config.Connect()
