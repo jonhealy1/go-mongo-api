@@ -26,7 +26,7 @@ func Connect() {
 
 	//connectionURI := fmt.Sprintf(connectionStringTemplate, username, password, clusterEndpoint)
 	// Database Config
-	clientOptions := options.Client().ApplyURI("mongodb://user:user@localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://user:user@mongo:27017")
 	// clientOptions := options.Client().ApplyURI(connectionURI)
 	client, err := mongo.NewClient(clientOptions)
 	//Set up a context required by mongo.Connect
