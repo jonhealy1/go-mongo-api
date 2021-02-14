@@ -3,7 +3,7 @@ FROM golang:1.14
 FROM golang:1.14
 
 WORKDIR /go/src/app
-COPY . .
+COPY ./api .
  
 RUN go get -d -v ./...
 RUN go install -v ./...
