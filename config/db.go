@@ -12,9 +12,22 @@ import (
 	"github.com/cavdy-play/go_mongo/controllers"
 )
 
+const (
+	// Timeout operations after N seconds
+	connectTimeout           = 5
+	connectionStringTemplate = "mongodb://%s:%s@%s"
+)
+
+// Connect connect
 func Connect() {
+	// username := os.Getenv("MONGODB_USERNAME")
+	// password := os.Getenv("MONGODB_PASSWORD")
+	//clusterEndpoint := os.Getenv("MONGODB_ENDPOINT")
+
+	//connectionURI := fmt.Sprintf(connectionStringTemplate, username, password, clusterEndpoint)
 	// Database Config
-	clientOptions := options.Client().ApplyURI("mongodb://sparkgeo:sparkgeo@40.85.223.221:27017/stac?authSource=admin")
+	clientOptions := options.Client().ApplyURI("mongodb://user:user@localhost:27017")
+	// clientOptions := options.Client().ApplyURI(connectionURI)
 	client, err := mongo.NewClient(clientOptions)
 	//Set up a context required by mongo.Connect
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -29,7 +42,7 @@ func Connect() {
 		log.Println("Connected!")
 	}
 	// Connect to the database
-	db := client.Database("stac")
+	db := client.Database("todos")
 	controllers.TodoCollection(db)
 	return
 }
