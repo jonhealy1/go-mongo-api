@@ -2,14 +2,16 @@ package config
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
 	"time"
 
+	"github.com/cavdy-play/go_mongo/controllers"
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-
-	"github.com/cavdy-play/go_mongo/controllers"
 )
 
 const (
@@ -18,16 +20,21 @@ const (
 	connectionStringTemplate = "mongodb://%s:%s@%s"
 )
 
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
+}
+
 // Connect connect
 func Connect() {
-	// username := os.Getenv("MONGODB_USERNAME")
-	// password := os.Getenv("MONGODB_PASSWORD")
-	//clusterEndpoint := os.Getenv("MONGODB_ENDPOINT")
+	username := os.Getenv("MONGODB_USERNAME")
+	password := os.Getenv("MONGODB_PASSWORD")
+	clusterEndpoint := os.Getenv("MONGODB_ENDPOINT")
 
-	//connectionURI := fmt.Sprintf(connectionStringTemplate, username, password, clusterEndpoint)
+	connectionURI := fmt.Sprintf(connectionStringTemplate, username, password, clusterEndpoint)
 	// Database Config
-	clientOptions := options.Client().ApplyURI("mongodb://user:user@mongo:27017")
-	// clientOptions := options.Client().ApplyURI(connectionURI)
+	clientOptions := options.Client().ApplyURI(connectionURI)
 	client, err := mongo.NewClient(clientOptions)
 	//Set up a context required by mongo.Connect
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
