@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
+import { Card, Header, Form, Input, Icon, Button, Checkbox, Radio, Select, TextArea} from "semantic-ui-react";
 
 let endpoint = "http://localhost:4747";
 
@@ -10,6 +10,7 @@ class ToDoList extends Component {
 
     this.state = {
       title: "",
+      body: "",
       items: []
     };
   }
@@ -25,14 +26,14 @@ class ToDoList extends Component {
   };
 
   onSubmit = () => {
-    let { title } = this.state;
+    let { title, body } = this.state;
     // console.log("pRINTING task", this.state.task);
     if (title) {
       axios
         .post(
           endpoint + "/todo",
           {
-            title
+            title, body
           },
           {
             headers: {
@@ -43,7 +44,8 @@ class ToDoList extends Component {
         .then(res => {
           this.getTask();
           this.setState({
-            title: ""
+            title: "",
+            body: ""
           });
           console.log(res);
         });
@@ -62,23 +64,31 @@ class ToDoList extends Component {
               color = "green";
             }
             return (
+
+    //           <Card.Content header='About Amy' />
+    // <Card.Content description={description} />
+    // <Card.Content extra>
+    //   <Icon name='user' />4 Friends
+    // </Card.Content>
+
+
               <Card key={item.id} color={color} fluid>
                 <Card.Content>
                   <Card.Header textAlign="left">
                     <div style={{ wordWrap: "break-word" }}>{item.title}</div>
                   </Card.Header>
-
+                  <Card.Content description={item.body} />
                   <Card.Meta textAlign="right">
                     <Icon
                       name="check circle"
                       color="green"
-                      onClick={() => this.updateTask(item.id)}
+                      onClick={() => this.updateTask(item["id"])}
                     />
                     <span style={{ paddingRight: 10 }}>Done</span>
                     <Icon
                       name="undo"
                       color="yellow"
-                      onClick={() => this.undoTask(item.id)}
+                      onClick={() => this.undoTask(item["id"])}
                     />
                     <span style={{ paddingRight: 10 }}>Undo</span>
                     <Icon
@@ -147,19 +157,43 @@ class ToDoList extends Component {
             TO DO LIST
           </Header>
         </div>
-        <div className="row">
-          <Form onSubmit={this.onSubmit}>
-            <Input
-              type="text"
-              name="title"
-              onChange={this.onChange}
-              value={this.state.title}
-              fluid
-              placeholder="Create Task"
-            />
-            {/* <Button >Create Task</Button> */}
-          </Form>
-        </div>
+        
+        <Form onSubmit={this.onSubmit}>
+        <Form.Group widths='equal'>
+          
+          <Form.Field
+            control={Input}
+            type="text"
+            name="title"
+            onChange={this.onChange}
+            fluid
+            placeholder="Create Task"
+            label='title'
+            fluid
+            value={this.state.title}
+          />
+          {/* <Form.Field
+            control={Input}
+            label='Last name'
+            placeholder='Last name'
+          /> */}
+        </Form.Group>
+        <Form.Field
+          control={TextArea}
+          onChange={this.onChange}
+          label='body'
+          type='body'
+          name='body'
+          fluid
+          value={this.state.body}
+          placeholder='Task Description'
+        />
+        <Form.Field
+          control={Checkbox}
+          label='I agree to the Terms and Conditions'
+        />
+        <Form.Field control={Button}>Submit</Form.Field>
+      </Form>
         <div className="row">
           <Card.Group>{this.state.items}</Card.Group>
         </div>

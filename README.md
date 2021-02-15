@@ -5,4 +5,5 @@
 `make run`
 
 ### run frontend
+`cd client`
 `npm start`
