@@ -11,6 +11,7 @@ class ToDoList extends Component {
     this.state = {
       title: "",
       body: "",
+      completed: "",
       items: []
     };
   }
@@ -60,7 +61,7 @@ class ToDoList extends Component {
           items: res.data["data"].map(item => {
             let color = "yellow";
 
-            if (item.id !== "dummy") {
+            if (item['completed'] === "") {
               color = "green";
             }
             return (
@@ -78,6 +79,8 @@ class ToDoList extends Component {
                     <div style={{ wordWrap: "break-word" }}>{item.title}</div>
                   </Card.Header>
                   <Card.Content description={item.body} />
+                  <Card.Content description={item["created_at"]} />
+                  <Card.Content description={item["completed"]} />
                   <Card.Meta textAlign="right">
                     <Icon
                       name="check circle"
@@ -114,6 +117,9 @@ class ToDoList extends Component {
   updateTask = id => {
     axios
       .put(endpoint + "/todo/" + id, {
+        "completed":"yes"
+      },
+      {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         }
@@ -174,7 +180,6 @@ class ToDoList extends Component {
             fluid
             placeholder="Create Task"
             label='title'
-            fluid
             value={this.state.title}
           />
           {/* <Form.Field
