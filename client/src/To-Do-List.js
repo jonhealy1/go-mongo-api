@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Card, Header, Form, Input, Icon, Button, Checkbox, Radio, Select, TextArea} from "semantic-ui-react";
+import { Card, Header, Form, Input, Icon, Button, Checkbox, Radio, Select, TextArea, Divider, Segment} from "semantic-ui-react";
 
 let endpoint = "http://localhost:4747";
 
@@ -152,11 +152,16 @@ class ToDoList extends Component {
   render() {
     return (
       <div>
+
+        <Segment>
+
         <div className="row">
           <Header className="header" as="h2">
             TO DO LIST
           </Header>
         </div>
+
+
         
         <Form onSubmit={this.onSubmit}>
         <Form.Group widths='equal'>
@@ -188,15 +193,17 @@ class ToDoList extends Component {
           value={this.state.body}
           placeholder='Task Description'
         />
-        <Form.Field
+        {/* <Form.Field
           control={Checkbox}
           label='I agree to the Terms and Conditions'
-        />
+        /> */}
         <Form.Field control={Button}>Submit</Form.Field>
       </Form>
+      <Divider section />
         <div className="row">
           <Card.Group>{this.state.items}</Card.Group>
         </div>
+        </Segment>
       </div>
     );
   }
