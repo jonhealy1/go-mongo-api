@@ -1,0 +1,44 @@
+name: Build docker image tar file
+on:
+  release:
+    types: [published]                                               
+jobs:                         
+  sensoris-job:                           
+    name: push test                          
+    runs-on: ubuntu-latest                           
+    steps:          
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.SENSORIS_PAT }}
+        submodules: recursive 
+
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: sparkgeo/sensoris-cli/sensoris_tools
+        tags: latest
+
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag woven_alpha/sensoris_tools
+
+    - name: Save docker image
+      run: docker save woven_alpha/sensoris_tools:latest | gzip > sensoris_tools.tar.gz
+
+    - name: Zip sample files
+      uses: papeloto/action-zip@v1
+      with:
+        files: samples/
+        dest: samples.zip
+
+    - name: Upload docker image
+      uses: actions/upload-artifact@v2
+      with:
+        name: sensoris_tools
+        path: |
+          sensoris_tools.tar.gz
+          README.md
+          samples.zip
